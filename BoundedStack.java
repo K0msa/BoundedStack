@@ -69,7 +69,7 @@ public class BoundedStack
      * @throws IllegalArgumentException() เมื่อ capacity, box ผิดเงื่อนไขที่ดังกล่าวไป
      *   
      */
-    public BoundedStack(int capacity,ArrayList<String> box)
+    public BoundedStack(int capacity,List<String> box)
     {
         if(capacity<=0) throw new IllegalArgumentException();
         if(capacity>100000) throw new IllegalArgumentException();
@@ -115,14 +115,20 @@ public class BoundedStack
      * ลบข้อความในกล่องทิ้ง 
      * @param mess ข้อความที่ต้องการลบ 
      * @return true ถ้าลบสำเร็จ , false ถ้าไม่พบข้อความที่ต้องการลบ
+     * @throws IllegalArgumentException() เมื่อ box เป็น null , ข้อความภายใน box เป็น สตริงว่าง 
      */
 
-    public boolean pop(String mess)
+    public boolean pop()
     {
-        if(!box.contains(mess)) return false;
+        if(box == null) throw new IllegalArgumentException();
+        for(String s : box)
+        {
+            if(s==null) throw new IllegalArgumentException();
+            if(s.isEmpty()) throw new IllegalArgumentException();
+        }
 
-        box.remove(mess);
-        return true;
+        box.remove(box.get(box.size()-1));
+        return true; //แก้
     }
 
 
@@ -160,5 +166,11 @@ public class BoundedStack
         return new ArrayList<>(box);
     }
 
-    public 
+    public BoundedStack shuffled()
+    {
+        List<String> copy = new ArrayList<>(box);
+        Collections.shuffle(copy);
+
+        return new BoundedStack(copy.size(),copy);
+    }
 }
