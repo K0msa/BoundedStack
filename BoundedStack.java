@@ -1,3 +1,4 @@
+package BoundedStack;
 import java.util.*;
 
 /**
@@ -43,6 +44,26 @@ public class BoundedStack
     }
 
     //===Creators===
+
+    /**
+     * สร้างกล่องชุดข้อความว่าง โดยกำหนดขนาดความจุเริ่มต้นเป็น 100
+     */
+    public BoundedStack()
+    {
+        this(100);
+    }
+
+    /**
+    * สร้างกล่องชุดข้อความจากกล่องที่รับเข้ามา โดยกำหนดขนาดความจุเริ่มต้นเป็น 100
+    * (เหมาะเมื่อไม่ต้องการระบุ capacity เอง)
+    * @param box กล่องชุดข้อความที่รับเข้ามา โดยข้อความในกล่องห้ามซ้ำกัน, ห้ามเป็น Str ว่าง, ห้ามเป็น null
+    * ข้อความด้านใน box ห้ามเป็น null
+    * @throws IllegalArgumentException() เมื่อ box หรือข้อความภายใน box ผิดเงื่อนไขที่กล่าวไป
+    */
+    public BoundedStack(List<String> box)
+    {
+        this(100, box);
+    }
 
     /**
      * สร้างกล่องชุดข้อความว่าง พร้อมกำหนดขนาดที่บรรจุได้
@@ -102,7 +123,7 @@ public class BoundedStack
     public boolean push(String mess)
     {
         if(mess == null || mess.isEmpty()) throw new IllegalArgumentException();
-        if(!box.contains(mess)) return false;
+        if(box.contains(mess)) return false;
         if(box.size()==capacity) return false;
 
 
@@ -121,14 +142,10 @@ public class BoundedStack
     public boolean pop()
     {
         if(box == null) throw new IllegalArgumentException();
-        for(String s : box)
-        {
-            if(s==null) throw new IllegalArgumentException();
-            if(s.isEmpty()) throw new IllegalArgumentException();
-        }
+        if(box.isEmpty()) throw new IllegalArgumentException();
 
-        box.remove(box.get(box.size()-1));
-        return true; //แก้
+        box.removeLast();
+        return true; 
     }
 
 
@@ -139,7 +156,6 @@ public class BoundedStack
 
     /**
      * คืนจำนวน ข้อความ ภายในกล่อง
-     * @param mess
      * @return จำนวนข้อความ ภายในกล่อง
      */
     public int size()
@@ -166,6 +182,12 @@ public class BoundedStack
         return new ArrayList<>(box);
     }
 
+    //===Producers
+    
+    /**
+     * สลับลำดับข้อความ
+     * @return
+     */
     public BoundedStack shuffled()
     {
         List<String> copy = new ArrayList<>(box);
